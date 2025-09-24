@@ -29,18 +29,25 @@ function startQuiz() {
     alert('Por favor, digite seu nome!');
     return;
   }
+  // Esconde a tela de entrada do nome
   document.getElementById('name-entry').style.display = 'none';
+
+  // Exibe o quiz
   document.getElementById('quiz').style.display = 'block';
   loadQuestion();
 }
 
 // Função para carregar a próxima pergunta
 function loadQuestion() {
-  const currentQuestion = questions[currentQuestionIndex];
-  document.getElementById('question').innerText = currentQuestion.prompt;
-  document.getElementById('answer').value = '';
-  document.getElementById('next-btn').style.display = 'none';
-  document.getElementById('submit-btn').style.display = 'inline-block';
+  if (currentQuestionIndex < questions.length) {
+    const currentQuestion = questions[currentQuestionIndex];
+    document.getElementById('question').innerText = currentQuestion.prompt;
+    document.getElementById('answer').value = '';
+    document.getElementById('next-btn').style.display = 'none';
+    document.getElementById('submit-btn').style.display = 'inline-block';
+  } else {
+    endGame();
+  }
 }
 
 // Função para verificar a resposta
@@ -78,4 +85,7 @@ function endGame() {
   leaderboard.sort((a, b) => b.score - a.score);
   localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
 
-  const
+  // Exibe a classificação
+  const leaderboardDiv = document.getElementById('leaderboard');
+  leaderboardDiv.innerHTML = `<ol>${leaderboard.map(player => `<li>${player.name}: ${player.score} pontos</li>`).join('')}</ol>`;
+}
