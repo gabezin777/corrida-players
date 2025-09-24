@@ -1,13 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Light Flappy Bird</title>
-    <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz de Verbos em Inglês</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <canvas id="gameCanvas"></canvas>
-    <script src="script.js"></script>
+
+<h1 style="color:#fff;">Quiz de Verbos em Inglês</h1>
+
+<!-- Área do quiz -->
+<div class="quiz-container" id="quiz">
+  <div class="question" id="question"></div>
+  <input type="text" id="answer" placeholder="Sua resposta aqui" />
+  <div class="buttons">
+    <button class="glow-on-hover" id="submit-btn" onclick="submitAnswer()">Enviar</button>
+    <button class="glow-on-hover" id="next-btn" onclick="nextQuestion()" style="display:none;">Próxima</button>
+  </div>
+</div>
+
+<!-- Área do reset -->
+<div id="reset-area" style="margin-top:20px;">
+  <button class="glow-on-hover" id="restart-btn" style="display:none;" onclick="restartQuiz()">Resetar Jogo</button>
+</div>
+
+<!-- Resultado final -->
+<div class="results" id="results">
+  <h2>Sua pontuação: <span id="score"></span></h2>
+  <div id="rank"></div>
+  <div id="score-table"></div>
+</div>
+
+<!-- Traduções -->
+<div class="translations" id="translations">
+  <h3>Traduções das suas respostas:</h3>
+  <ul id="translation-list"></ul>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
