@@ -3,49 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quiz de Verbos em Inglês</title>
+  <title>Quiz de Traduções</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<h1 style="color:#fff;">Quiz de Verbos em Inglês</h1>
+  <h1>Quiz de Traduções - Qual é o seu nome?</h1>
 
-<!-- Pergunta para nome do jogador -->
-<div id="name-entry" class="quiz-container">
-  <h2>Qual é o seu nome?</h2>
-  <input type="text" id="player-name" placeholder="Digite seu nome" />
-  <button class="glow-on-hover" id="start-btn" onclick="startQuiz()">Iniciar Quiz</button>
-</div>
+  <!-- Tela inicial para capturar o nome do jogador -->
+  <div id="name-entry" class="quiz-container">
+    <input type="text" id="player-name" placeholder="Digite seu nome" />
+    <button class="glow-on-hover" id="start-btn" onclick="startQuiz()">Iniciar Quiz</button>
+  </div>
 
-<!-- Área do quiz -->
-<div class="quiz-container" id="quiz" style="display: none;">
-  <div class="question" id="question"></div>
-  <input type="text" id="answer" placeholder="Sua resposta aqui" />
-  <div class="buttons">
-    <!-- Botão 'Enviar' com texto -->
+  <!-- Área do quiz -->
+  <div class="quiz-container" id="quiz" style="display: none;">
+    <div class="question" id="question"></div>
+    <input type="text" id="answer" placeholder="Sua resposta aqui" />
     <button class="glow-on-hover" id="submit-btn" onclick="submitAnswer()">Enviar</button>
     <button class="glow-on-hover" id="next-btn" onclick="nextQuestion()" style="display:none;">Próxima</button>
   </div>
-</div>
 
-<!-- Área de reset -->
-<div id="reset-area" style="margin-top:20px;">
-  <button class="glow-on-hover" id="restart-btn" style="display:none;" onclick="restartQuiz()">Resetar Jogo</button>
-</div>
+  <!-- Resultado do quiz -->
+  <div id="results" class="results" style="display:none;">
+    <h2>Resultado Final</h2>
+    <p>Pontuação de <span id="final-score"></span></p>
+    <h3>Classificação:</h3>
+    <div id="leaderboard"></div>
+  </div>
 
-<!-- Resultado final -->
-<div class="results" id="results" style="display:none;">
-  <h2>Sua pontuação: <span id="score"></span></h2>
-  <div id="rank"></div>
-  <div id="score-table"></div>
-</div>
-
-<!-- Traduções -->
-<div class="translations" id="translations" style="display:none;">
-  <h3>Traduções das suas respostas:</h3>
-  <ul id="translation-list"></ul>
-</div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
