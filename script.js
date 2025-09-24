@@ -52,5 +52,4 @@ let score = 0;
 const userAnswers = [];
 
 const questionDiv = document.getElementById('question');
-const answerInput = document.getElementById('answer');
-const submitBtn = document.get
+const answerInput = document.getElementById('
