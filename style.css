@@ -96,6 +96,10 @@ input[type="text"]:focus {
   100% { background-position: 0 0; }
 }
 
+<<<<<<< HEAD
+/* Área de resultados e traduções */
+#results, #transl
+=======
 /* Área de resultados */
 .results {
   background-color: #fff;
