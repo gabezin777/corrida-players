@@ -10,8 +10,15 @@
 
 <h1 style="color:#fff;">Quiz de Verbos em Inglês</h1>
 
+<!-- Pergunta para nome do jogador -->
+<div id="name-entry" class="quiz-container">
+  <h2>Qual é o seu nome?</h2>
+  <input type="text" id="player-name" placeholder="Digite seu nome" />
+  <button class="glow-on-hover" id="start-btn" onclick="startQuiz()">Iniciar Quiz</button>
+</div>
+
 <!-- Área do quiz -->
-<div class="quiz-container" id="quiz">
+<div class="quiz-container" id="quiz" style="display: none;">
   <div class="question" id="question"></div>
   <input type="text" id="answer" placeholder="Sua resposta aqui" />
   <div class="buttons">
@@ -20,20 +27,20 @@
   </div>
 </div>
 
-<!-- Área do reset -->
+<!-- Área de reset -->
 <div id="reset-area" style="margin-top:20px;">
   <button class="glow-on-hover" id="restart-btn" style="display:none;" onclick="restartQuiz()">Resetar Jogo</button>
 </div>
 
 <!-- Resultado final -->
-<div class="results" id="results">
+<div class="results" id="results" style="display:none;">
   <h2>Sua pontuação: <span id="score"></span></h2>
   <div id="rank"></div>
   <div id="score-table"></div>
 </div>
 
 <!-- Traduções -->
-<div class="translations" id="translations">
+<div class="translations" id="translations" style="display:none;">
   <h3>Traduções das suas respostas:</h3>
   <ul id="translation-list"></ul>
 </div>
