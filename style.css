@@ -1,0 +1,17 @@
+/* Make the canvas fill the window with a light background */
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #e0f7fa; /* Light blue background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#gameCanvas {
+    display: block;
+    background-color: #ffffff;
+    border: 2px solid #b2ebf2;
+}
