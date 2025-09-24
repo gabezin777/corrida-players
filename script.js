@@ -65,27 +65,4 @@ function submitAnswer() {
     document.getElementById('next-btn').style.display = 'inline-block';
     document.getElementById('submit-btn').style.display = 'none';
   } else {
-    endGame();
-  }
-}
-
-// Função para ir para a próxima pergunta
-function nextQuestion() {
-  loadQuestion();
-}
-
-// Função para finalizar o jogo
-function endGame() {
-  document.getElementById('quiz').style.display = 'none';
-  document.getElementById('results').style.display = 'block';
-  document.getElementById('final-score').innerText = score;
-
-  // Atualiza a tabela de classificação
-  leaderboard.push({ name: playerName, score: score });
-  leaderboard.sort((a, b) => b.score - a.score);
-  localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
-
-  // Exibe a classificação
-  const leaderboardDiv = document.getElementById('leaderboard');
-  leaderboardDiv.innerHTML = `<ol>${leaderboard.map(player => `<li>${player.name}: ${player.score} pontos</li>`).join('')}</ol>`;
-}
+   
