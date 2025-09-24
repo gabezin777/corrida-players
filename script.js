@@ -78,5 +78,12 @@ function endGame() {
 
 // Função para resetar o quiz
 function resetQuiz() {
-  currentQuestion
-A
+  currentQuestionIndex = 0;
+  score = 0;
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('name-entry').style.display = 'block';
+  document.getElementById('player-name').value = '';
+}
+  
+// Lidar com o evento de clique no botão "Iniciar Quiz"
+document.getElementById('start-btn').addEventListener('click', startQuiz);
