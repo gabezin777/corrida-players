@@ -1,0 +1,37 @@
+          <button
+            onTouchStart={() => handleTouchControl('left')}
+            className="bg-gray-600 text-white p-4 rounded-full w-16 h-16 flex items-center justify-center text-2xl shadow-lg active:bg-gray-700"
+          >
+            ←
+          </button>
+          <button
+            onTouchStart={() => handleTouchControl('right')}
+            className="bg-gray-600 text-white p-4 rounded-full w-16 h-16 flex items-center justify-center text-2xl shadow-lg active:bg-gray-700"
+          >
+            →
+          </button>
+        </div>
+      ) : (
+        <div className="mt-6 text-gray-600 text-center">
+          Use as setas ← → do teclado para mover
+        </div>
+      )}
+      {/* Instruções */}
+      <div className="mt-4 text-center text-gray-600">
+        <p>Mova o carro para coletar os pontos amarelos!</p>
+        <p>Pontos no meio da pista valem 10 pontos cada.</p>
+        <p className="text-red-500 font-bold mt-2">🚍 Cuidado com os ônibus azuis e animais laranja!</p>
+        <p className="text-red-500">Se bater, perde todos os pontos! 😱</p>
+      </div>
+      <style jsx>{`
+        .dashed-line {
+          background-image: linear-gradient(to bottom, 
+            transparent 0%, transparent 50%, 
+            yellow 50%, yellow 100%);
+          background-size: 100% 20px;
+        }
+      `}</style>
+    </div>
+  );
+};
+export default RacingGame;
