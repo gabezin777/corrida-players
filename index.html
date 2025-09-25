@@ -9,30 +9,49 @@
 </head>
 
 <body>
-
+  <!-- h1 centralizado (adicionei classes do CSS para melhor estilo) -->
   <h1>Quiz de Traduções - Qual é o seu nome?</h1>
 
   <!-- Tela inicial para capturar o nome do jogador -->
   <div id="name-entry" class="quiz-container">
+    <div class="question">Digite seu nome para começar:</div> <!-- Adicionei para consistência -->
     <input type="text" id="player-name" placeholder="Digite seu nome" />
     <button class="glow-on-hover" id="start-btn">Iniciar Quiz</button>
   </div>
 
   <!-- Área do quiz -->
   <div class="quiz-container" id="quiz" style="display: none;">
-    <div class="question" id="question"></div>
+    <!-- Pontuação atual (opcional - mostra pontos em tempo real) -->
+    <div id="current-score" style="font-size: 1.1em; color: #334155; margin-bottom: 15px; font-weight: bold;">Pontos: 0</div>
+    
+    <div class="question" id="question">Carregando...</div>
+    
+    <!-- Barra de progresso (opcional - visualiza avanço) -->
+    <div id="progress-container" style="width: 100%; background: rgba(0,0,0,0.1); height: 8px; border-radius: 4px; margin: 20px 0; overflow: hidden;">
+      <div id="progress-bar" style="height: 100%; background: linear-gradient(90deg, #3b82f6, #ef4444); width: 0%; transition: width 0.3s ease; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold;">1/9</div>
+    </div>
+    
     <input type="text" id="answer" placeholder="Sua resposta aqui" />
-    <button class="glow-on-hover" id="submit-btn" onclick="submitAnswer()">Enviar</button>
-    <button class="glow-on-hover" id="next-btn" onclick="nextQuestion()" style="display:none;">Próxima</button>
+    
+    <!-- Feedback da resposta (opcional - mostra se acertou/errado) -->
+    <div id="feedback" style="display: none; padding: 10px; margin: 10px 0; border-radius: 8px; font-weight: bold; transition: opacity 0.3s ease; text-align: center;"></div>
+    
+    <button class="glow-on-hover" id="submit-btn">Enviar</button>
+    <button class="glow-on-hover" id="next-btn" style="display:none;">Próxima</button>
   </div>
 
   <!-- Resultado do quiz -->
-  <div id="results" class="results" style="display:none;">
+  <div id="results" class="quiz-container" style="display:none;"> <!-- Mudei class para quiz-container -->
     <h2>Resultado Final</h2>
-    <p>Pontuação de <span id="final-score"></span></p>
+    <p>Parabéns, <span id="player-name-display"></span>!</p> <!-- Adicionei para mostrar nome -->
+    <p>Pontuação de <span id="final-score">0</span> pontos</p>
+    
+    <!-- Mensagem personalizada baseada no score (opcional) -->
+    <p id="score-message" style="font-size: 1.2em; margin: 15px 0; text-align: center; color: #1e293b;"></p>
+    
     <h3>Classificação:</h3>
     <ol id="leaderboard-list" style="margin: 0; padding: 0;"></ol>
-    <button class="glow-on-hover" id="reset-btn" onclick="resetQuiz()">Resetar Jogo</button>
+    <button class="glow-on-hover" id="reset-btn">Resetar Jogo</button>
   </div>
 
   <script src="script.js"></script>
