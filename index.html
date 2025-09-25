@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quiz de Traduções</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
 
   <h1>Quiz de Traduções - Qual é o seu nome?</h1>
@@ -29,10 +31,11 @@
     <h2>Resultado Final</h2>
     <p>Pontuação de <span id="final-score"></span></p>
     <h3>Classificação:</h3>
-    <div id="leaderboard"></div>
+    <ol id="leaderboard-list" style="margin: 0; padding: 0;"></ol>
     <button class="glow-on-hover" id="reset-btn" onclick="resetQuiz()">Resetar Jogo</button>
   </div>
 
   <script src="script.js"></script>
 </body>
+
 </html>

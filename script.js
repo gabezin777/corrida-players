@@ -42,12 +42,12 @@ function addScore(points) {
 function showFeedback(isCorrect) {
   const feedback = document.getElementById('feedback');
   const answerInput = document.getElementById('answer');
-  
+
   if (feedback && answerInput) {
     feedback.textContent = isCorrect ? 'Correto! 🎉' : 'Errado! Tente novamente.';
     feedback.className = isCorrect ? 'feedback correct' : 'feedback incorrect';
     feedback.style.display = 'block';
-    
+
     // Animação no input
     if (isCorrect) {
       answerInput.style.borderColor = '#10b981';
@@ -56,7 +56,7 @@ function showFeedback(isCorrect) {
       answerInput.style.borderColor = '#ef4444';
       answerInput.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
     }
-    
+
     // Fade out feedback após 2 segundos
     setTimeout(() => {
       feedback.style.opacity = '0';
@@ -75,17 +75,17 @@ function showFeedback(isCorrect) {
 function loadLeaderboard() {
   const leaderboardList = document.getElementById('leaderboard-list');
   if (!leaderboardList) return;
-  
+
   const scores = JSON.parse(localStorage.getItem('quizScores') || '[]');
   const sortedScores = scores.sort((a, b) => b.score - a.score).slice(0, 10);
   leaderboardList.innerHTML = ''; // Limpar lista anterior
-  
+
   sortedScores.forEach((entry, index) => {
     const li = document.createElement('li');
     li.innerHTML = `<span class="rank">${index + 1}.</span> ${entry.name}: ${entry.score} pontos`;
     leaderboardList.appendChild(li);
   });
-  
+
   // Mostrar leaderboard se houver scores
   const leaderboardSection = document.getElementById('leaderboard');
   if (leaderboardSection && sortedScores.length > 0) {
@@ -153,16 +153,16 @@ function startQuiz() {
 function loadQuestion() {
   const questionEl = document.getElementById('question');
   const answerInput = document.getElementById('answer');
-  
+
   if (!questionEl) {
     console.error('Elemento #question não encontrado!');
     return;
   }
-  
+
   if (currentQuestionIndex < questions.length) {
     const currentQuestion = questions[currentQuestionIndex];
     questionEl.innerText = currentQuestion.prompt;
-    
+
     // Animação de fade in para a pergunta (se suportado)
     if (questionEl.style) {
       questionEl.style.opacity = '0';
@@ -173,20 +173,20 @@ function loadQuestion() {
         questionEl.style.transform = 'translateX(0)';
       }, 100);
     }
-    
+
     if (answerInput) {
       answerInput.value = '';
       answerInput.focus(); // Auto-focus no input
     }
-    
+
     const nextBtn = document.getElementById('next-btn');
     const submitBtn = document.getElementById('submit-btn');
     const feedback = document.getElementById('feedback');
-    
+
     if (nextBtn) nextBtn.style.display = 'none';
     if (submitBtn) submitBtn.style.display = 'inline-block';
     if (feedback) feedback.style.display = 'none';
-    
+
     updateProgress();
     console.log(`Carregada pergunta ${currentQuestionIndex + 1}: ${currentQuestion.prompt}`); // Debug opcional
   } else {
@@ -201,7 +201,7 @@ function submitAnswer() {
     console.error('Elemento #answer não encontrado!');
     return;
   }
-  
+
   const playerAnswer = answerInput.value.trim().toLowerCase();
   const correctAnswer = questions[currentQuestionIndex].answer.toLowerCase();
   const isCorrect = playerAnswer === correctAnswer;
@@ -228,7 +228,7 @@ function submitAnswer() {
 
   const nextBtn = document.getElementById('next-btn');
   const submitBtn = document.getElementById('submit-btn');
-  
+
   if (currentQuestionIndex < questions.length) {
     // Delay antes de mostrar next button para ver feedback
     setTimeout(() => {
@@ -238,7 +238,7 @@ function submitAnswer() {
   } else {
     setTimeout(endGame, 2200);
   }
-  
+
   console.log(`Resposta submetida. Índice atual: ${currentQuestionIndex}`); // Debug opcional
 }
 
@@ -261,23 +261,23 @@ function nextQuestion() {
 // Função para finalizar o jogo com efeitos visuais
 function endGame() {
   saveScore(); // Salvar no leaderboard
-  
+
   const quiz = document.getElementById('quiz');
   const results = document.getElementById('results');
   const finalScoreEl = document.getElementById('final-score');
-  
+
   if (finalScoreEl) {
     finalScoreEl.innerText = score;
   }
-  
+
   if (quiz && results) {
     quiz.style.opacity = '0';
     quiz.style.transform = 'translateY(-10px)';
-    
+
     setTimeout(() => {
       quiz.style.display = 'none';
       results.style.display = 'block';
-      
+
       // Animação de entrada para results
       results.style.opacity = '0';
       results.style.transform = 'translateX(30px)';
@@ -292,15 +292,15 @@ function endGame() {
     if (quiz) quiz.style.display = 'none';
     if (results) results.style.display = 'block';
   }
-  
+
   // Efeito confetti simples se score alto (acima de 240/270)
   if (score >= 240) {
     triggerConfetti();
   }
-  
+
   // Carregar leaderboard
   loadLeaderboard();
-  
+
   // Mostrar mensagem personalizada (se elemento existir)
   const messageEl = document.getElementById('score-message');
   if (messageEl) {
@@ -335,7 +335,7 @@ function triggerConfetti() {
       animation: confetti-fall 3s linear forwards;
     `;
     document.body.appendChild(confetti);
-    
+
     setTimeout(() => confetti.remove(), 3000);
   }
 }
@@ -360,7 +360,7 @@ function resetQuiz() {
   const results = document.getElementById('results');
   const nameEntry = document.getElementById('name-entry');
   const progressBar = document.getElementById('progress-bar');
-  
+
   if (results && nameEntry) {
     results.style.opacity = '0';
     results.style.transform = 'translateX(30px)';
@@ -379,5 +379,5 @@ function resetQuiz() {
     if (results) results.style.display = 'none';
     if (nameEntry) nameEntry.style.display = 'block';
   }
-  
+
   if (document
