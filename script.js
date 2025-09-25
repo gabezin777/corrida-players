@@ -17,7 +17,7 @@ let currentQuestionIndex = 0;
 let score = 0;
 let playerAnswers = []; // Para rastrear respostas para feedback visual
 
-// Função para atualizar a barra de progresso
+// Função para atualizar a barra de progresso (se o elemento existir)
 function updateProgress() {
   const progressBar = document.getElementById('progress-bar');
   if (progressBar) {
@@ -27,7 +27,7 @@ function updateProgress() {
   }
 }
 
-// Função para adicionar pontuação com animação
+// Função para adicionar pontuação com animação (se elementos existirem)
 function addScore(points) {
   const scoreElement = document.getElementById('current-score');
   if (scoreElement) {
@@ -38,12 +38,12 @@ function addScore(points) {
   }
 }
 
-// Função para mostrar feedback da resposta
+// Função para mostrar feedback da resposta (se elemento existir)
 function showFeedback(isCorrect) {
   const feedback = document.getElementById('feedback');
   const answerInput = document.getElementById('answer');
   
-  if (feedback) {
+  if (feedback && answerInput) {
     feedback.textContent = isCorrect ? 'Correto! 🎉' : 'Errado! Tente novamente.';
     feedback.className = isCorrect ? 'feedback correct' : 'feedback incorrect';
     feedback.style.display = 'block';
@@ -71,24 +71,25 @@ function showFeedback(isCorrect) {
   }
 }
 
-// Função para carregar leaderboard do localStorage
+// Função para carregar leaderboard do localStorage (se elemento existir)
 function loadLeaderboard() {
-  const leaderboard = document.getElementById('leaderboard-list');
-  if (!leaderboard) return;
+  const leaderboardList = document.getElementById('leaderboard-list');
+  if (!leaderboardList) return;
   
   const scores = JSON.parse(localStorage.getItem('quizScores') || '[]');
-  scores.sort((a, b) => b.score - a.score); // Ordenar por pontuação descendente
-  scores.slice(0, 10).forEach((entry, index) => {
+  const sortedScores = scores.sort((a, b) => b.score - a.score).slice(0, 10);
+  leaderboardList.innerHTML = ''; // Limpar lista anterior
+  
+  sortedScores.forEach((entry, index) => {
     const li = document.createElement('li');
     li.innerHTML = `<span class="rank">${index + 1}.</span> ${entry.name}: ${entry.score} pontos`;
-    leaderboard.appendChild(li);
+    leaderboardList.appendChild(li);
   });
   
   // Mostrar leaderboard se houver scores
   const leaderboardSection = document.getElementById('leaderboard');
-  if (scores.length > 0) {
+  if (leaderboardSection && sortedScores.length > 0) {
     leaderboardSection.style.display = 'block';
-    loadLeaderboard(); // Carregar uma vez
   }
 }
 
@@ -97,40 +98,49 @@ function saveScore() {
   const scores = JSON.parse(localStorage.getItem('quizScores') || '[]');
   scores.push({ name: playerName, score: score, date: new Date().toLocaleDateString() });
   localStorage.setItem('quizScores', JSON.stringify(scores));
+  loadLeaderboard(); // Recarregar leaderboard
 }
 
 // Função para iniciar o quiz com animações
 function startQuiz() {
   playerName = document.getElementById('player-name').value.trim();
   if (!playerName) {
-    // Animação de erro no input de nome
+    // Animação de erro no input de nome (se elemento existir)
     const nameInput = document.getElementById('player-name');
-    nameInput.style.borderColor = '#ef4444';
-    nameInput.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.2)';
-    setTimeout(() => {
-      nameInput.style.borderColor = '#3b82f6';
-      nameInput.style.boxShadow = 'none';
-    }, 1000);
+    if (nameInput) {
+      nameInput.style.borderColor = '#ef4444';
+      nameInput.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.2)';
+      setTimeout(() => {
+        nameInput.style.borderColor = '#3b82f6';
+        nameInput.style.boxShadow = 'none';
+      }, 1000);
+    }
     alert('Por favor, digite seu nome!');
     return;
   }
 
-  // Animação de transição suave
+  // Animação de transição suave (se elementos existirem)
   const nameEntry = document.getElementById('name-entry');
   const quiz = document.getElementById('quiz');
-  nameEntry.style.opacity = '0';
-  nameEntry.style.transform = 'translateY(-20px)';
-  setTimeout(() => {
-    nameEntry.style.display = 'none';
-    quiz.style.display = 'block';
-    quiz.style.opacity = '0';
-    quiz.style.transform = 'translateY(20px)';
+  if (nameEntry && quiz) {
+    nameEntry.style.opacity = '0';
+    nameEntry.style.transform = 'translateY(-20px)';
     setTimeout(() => {
-      quiz.style.transition = 'all 0.5s ease';
-      quiz.style.opacity = '1';
-      quiz.style.transform = 'translateY(0)';
-    }, 100);
-  }, 300);
+      nameEntry.style.display = 'none';
+      quiz.style.display = 'block';
+      quiz.style.opacity = '0';
+      quiz.style.transform = 'translateY(20px)';
+      setTimeout(() => {
+        quiz.style.transition = 'all 0.5s ease';
+        quiz.style.opacity = '1';
+        quiz.style.transform = 'translateY(0)';
+      }, 100);
+    }, 300);
+  } else {
+    // Fallback sem animação
+    if (nameEntry) nameEntry.style.display = 'none';
+    if (quiz) quiz.style.display = 'block';
+  }
 
   currentQuestionIndex = 0;
   score = 0;
@@ -144,27 +154,41 @@ function loadQuestion() {
   const questionEl = document.getElementById('question');
   const answerInput = document.getElementById('answer');
   
+  if (!questionEl) {
+    console.error('Elemento #question não encontrado!');
+    return;
+  }
+  
   if (currentQuestionIndex < questions.length) {
     const currentQuestion = questions[currentQuestionIndex];
     questionEl.innerText = currentQuestion.prompt;
     
-    // Animação de fade in para a pergunta
-    questionEl.style.opacity = '0';
-    questionEl.style.transform = 'translateX(-20px)';
-    setTimeout(() => {
-      questionEl.style.transition = 'all 0.4s ease';
-      questionEl.style.opacity = '1';
-      questionEl.style.transform = 'translateX(0)';
-    }, 100);
+    // Animação de fade in para a pergunta (se suportado)
+    if (questionEl.style) {
+      questionEl.style.opacity = '0';
+      questionEl.style.transform = 'translateX(-20px)';
+      setTimeout(() => {
+        questionEl.style.transition = 'all 0.4s ease';
+        questionEl.style.opacity = '1';
+        questionEl.style.transform = 'translateX(0)';
+      }, 100);
+    }
     
-    answerInput.value = '';
-    answerInput.focus(); // Auto-focus no input
+    if (answerInput) {
+      answerInput.value = '';
+      answerInput.focus(); // Auto-focus no input
+    }
     
-    document.getElementById('next-btn').style.display = 'none';
-    document.getElementById('submit-btn').style.display = 'inline-block';
-    document.getElementById('feedback').style.display = 'none';
+    const nextBtn = document.getElementById('next-btn');
+    const submitBtn = document.getElementById('submit-btn');
+    const feedback = document.getElementById('feedback');
+    
+    if (nextBtn) nextBtn.style.display = 'none';
+    if (submitBtn) submitBtn.style.display = 'inline-block';
+    if (feedback) feedback.style.display = 'none';
     
     updateProgress();
+    console.log(`Carregada pergunta ${currentQuestionIndex + 1}: ${currentQuestion.prompt}`); // Debug opcional
   } else {
     endGame();
   }
@@ -172,7 +196,13 @@ function loadQuestion() {
 
 // Função para verificar a resposta com feedback interativo
 function submitAnswer() {
-  const playerAnswer = document.getElementById('answer').value.trim().toLowerCase();
+  const answerInput = document.getElementById('answer');
+  if (!answerInput) {
+    console.error('Elemento #answer não encontrado!');
+    return;
+  }
+  
+  const playerAnswer = answerInput.value.trim().toLowerCase();
   const correctAnswer = questions[currentQuestionIndex].answer.toLowerCase();
   const isCorrect = playerAnswer === correctAnswer;
 
@@ -182,41 +212,50 @@ function submitAnswer() {
     score += 30;
     addScore(30);
   } else {
-    addScore(0); // Sem animação de pontuação para incorreto
-    // Mostrar resposta correta brevemente
+    addScore(0);
+    // Mostrar resposta correta brevemente (se feedback existir)
     const feedback = document.getElementById('feedback');
-    setTimeout(() => {
-      if (!isCorrect) {
+    if (feedback && !isCorrect) {
+      setTimeout(() => {
         feedback.innerHTML += `<br><small>Resposta correta: ${questions[currentQuestionIndex].answer}</small>`;
-      }
-    }, 500);
+      }, 500);
+    }
   }
 
   showFeedback(isCorrect);
 
   currentQuestionIndex++;
 
+  const nextBtn = document.getElementById('next-btn');
+  const submitBtn = document.getElementById('submit-btn');
+  
   if (currentQuestionIndex < questions.length) {
     // Delay antes de mostrar next button para ver feedback
     setTimeout(() => {
-      document.getElementById('next-btn').style.display = 'inline-block';
-      document.getElementById('submit-btn').style.display = 'none';
+      if (nextBtn) nextBtn.style.display = 'inline-block';
+      if (submitBtn) submitBtn.style.display = 'none';
     }, 2200);
   } else {
     setTimeout(endGame, 2200);
   }
+  
+  console.log(`Resposta submetida. Índice atual: ${currentQuestionIndex}`); // Debug opcional
 }
 
 // Função para passar para a próxima pergunta com transição
 function nextQuestion() {
   const quiz = document.getElementById('quiz');
-  quiz.style.opacity = '0';
-  quiz.style.transform = 'translateY(10px)';
-  setTimeout(() => {
-    loadQuestion();
-    quiz.style.opacity = '1';
-    quiz.style.transform = 'translateY(0)';
-  }, 300);
+  if (quiz && quiz.style) {
+    quiz.style.opacity = '0';
+    quiz.style.transform = 'translateY(10px)';
+    setTimeout(() => {
+      loadQuestion();
+      quiz.style.opacity = '1';
+      quiz.style.transform = 'translateY(0)';
+    }, 300);
+  } else {
+    loadQuestion(); // Fallback sem animação
+  }
 }
 
 // Função para finalizar o jogo com efeitos visuais
@@ -227,128 +266,118 @@ function endGame() {
   const results = document.getElementById('results');
   const finalScoreEl = document.getElementById('final-score');
   
-  quiz.style.opacity = '0';
-  quiz.style.transform = 'translateY(-10px)';
-  
-  setTimeout(() => {
-    quiz.style.display = 'none';
-    results.style.display = 'block';
+  if (finalScoreEl) {
     finalScoreEl.innerText = score;
+  }
+  
+  if (quiz && results) {
+    quiz.style.opacity = '0';
+    quiz.style.transform = 'translateY(-10px)';
     
-    // Animação de entrada para results
-    results.style.opacity = '0';
-    results.style.transform = 'translateX(30px)';
     setTimeout(() => {
-      results.style.transition = 'all 0.6s ease';
-      results.style.opacity = '1';
-      results.style.transform = 'translateX(0)';
-    }, 100);
-    
-    // Efeito confetti simples se score alto (acima de 240/270)
-    if (score >= 240) {
-      triggerConfetti();
+      quiz.style.display = 'none';
+      results.style.display = 'block';
+      
+      // Animação de entrada para results
+      results.style.opacity = '0';
+      results.style.transform = 'translateX(30px)';
+      setTimeout(() => {
+        results.style.transition = 'all 0.6s ease';
+        results.style.opacity = '1';
+        results.style.transform = 'translateX(0)';
+      }, 100);
+    }, 300);
+  } else {
+    // Fallback sem animação
+    if (quiz) quiz.style.display = 'none';
+    if (results) results.style.display = 'block';
+  }
+  
+  // Efeito confetti simples se score alto (acima de 240/270)
+  if (score >= 240) {
+    triggerConfetti();
+  }
+  
+  // Carregar leaderboard
+  loadLeaderboard();
+  
+  // Mostrar mensagem personalizada (se elemento existir)
+  const messageEl = document.getElementById('score-message');
+  if (messageEl) {
+    let message = '';
+    if (score === 270) {
+      message = 'Perfeito! Você é um gênio! 🌟';
+    } else if (score >= 180) {
+      message = 'Ótimo trabalho! Continue assim! 👍';
+    } else if (score >= 90) {
+      message = 'Bom esforço! Pratique mais! 📚';
+    } else {
+      message = 'Não desanime! Tente novamente! 💪';
     }
-    
-    // Carregar leaderboard
-    loadLeaderboard();
-    
-    // Mostrar mensagem personalizada
-    const messageEl = document.getElementById('score-message');
-    if (messageEl) {
-      let message = '';
-      if (score === 270) {
-        message = 'Perfeito! Você é um gênio! 🌟';
-      } else if (score >= 180) {
-        message = 'Ótimo trabalho! Continue assim! 👍';
-      } else if (score >= 90) {
-        message = 'Bom esforço! Pratique mais! 📚';
-      } else {
-        message = 'Não desanime! Tente novamente! 💪';
-      }
-      messageEl.innerText = message;
-    }
-  }, 300);
+    messageEl.innerText = message;
+  }
 }
 
-// Função simples de confetti (usando CSS particles ou biblioteca simples)
+// Função simples de confetti (usando CSS particles)
 function triggerConfetti() {
-  // Criar partículas de confetti
   for (let i = 0; i < 50; i++) {
     const confetti = document.createElement('div');
-    confetti.style.position = 'fixed';
-    confetti.style.left = Math.random() * 100 + 'vw';
-    confetti.style.top = '-10px';
-    confetti.style.width = '10px';
-    confetti.style.height = '10px';
-    confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-    confetti.style.borderRadius = '50%';
-    confetti.style.pointerEvents = 'none';
-    confetti.style.zIndex = '1000';
-    confetti.style.animation = 'confetti-fall 3s linear forwards';
+    confetti.style.cssText = `
+      position: fixed;
+      left: ${Math.random() * 100}vw;
+      top: -10px;
+      width: 10px;
+      height: 10px;
+      background-color: hsl(${Math.random() * 360}, 100%, 50%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1000;
+      animation: confetti-fall 3s linear forwards;
+    `;
     document.body.appendChild(confetti);
     
     setTimeout(() => confetti.remove(), 3000);
   }
 }
 
-// Adicionar keyframes para confetti no CSS (você pode adicionar isso ao CSS)
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes confetti-fall {
-    to {
-      transform: translateY(100vh) rotate(720deg);
-      opacity: 0;
+// Adicionar keyframes para confetti no CSS (uma vez só)
+if (!document.getElementById('confetti-style')) {
+  const style = document.createElement('style');
+  style.id = 'confetti-style';
+  style.textContent = `
+    @keyframes confetti-fall {
+      to {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
     }
-  }
-`;
-document.head.appendChild(style);
+  `;
+  document.head.appendChild(style);
+}
 
 // Função para resetar o quiz com animação
 function resetQuiz() {
   const results = document.getElementById('results');
   const nameEntry = document.getElementById('name-entry');
-  
-  results.style.opacity = '0';
-  results.style.transform = 'translateX(30px)';
-  setTimeout(() => {
-    results.style.display = 'none';
-    nameEntry.style.display = 'block';
-    nameEntry.style.opacity = '0';
-    nameEntry.style.transform = 'translateY(20px)';
-    setTimeout(() => {
-      nameEntry.style.opacity = '1';
-      nameEntry.style.transform = 'translateY(0)';
-    }, 100);
-    document.getElementById('player-name').value = '';
-    document.getElementById('leaderboard-list').innerHTML = ''; // Limpar leaderboard para reload
-  }, 300);
-  
-  // Resetar progresso se existir
   const progressBar = document.getElementById('progress-bar');
-  if (progressBar) progressBar.style.width = '0%';
-}
-
-// Event Listeners
-document.addEventListener('DOMContentLoaded', () => {
-  // Auto-focus no input de nome
-  document.getElementById('player-name').focus();
   
-  // Listeners para botões
-  document.getElementById('start-btn').addEventListener('click', startQuiz);
-  document.getElementById('submit-btn').addEventListener('click', submitAnswer);
-  document.getElementById('next-btn').addEventListener('click', nextQuestion);
-  document.getElementById('reset-btn').addEventListener('click', resetQuiz);
+  if (results && nameEntry) {
+    results.style.opacity = '0';
+    results.style.transform = 'translateX(30px)';
+    setTimeout(() => {
+      results.style.display = 'none';
+      nameEntry.style.display = 'block';
+      nameEntry.style.opacity = '0';
+      nameEntry.style.transform = 'translateY(20px)';
+      setTimeout(() => {
+        nameEntry.style.opacity = '1';
+        nameEntry.style.transform = 'translateY(0)';
+      }, 100);
+    }, 300);
+  } else {
+    // Fallback
+    if (results) results.style.display = 'none';
+    if (nameEntry) nameEntry.style.display = 'block';
+  }
   
-  // Enter key para submit answer
-  document.getElementById('answer').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') submitAnswer();
-  });
-  
-  // Enter key para start quiz
-  document.getElementById('player-name').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') startQuiz();
-  });
-  
-  // Inicializar progresso
-  updateProgress();
-});
+  if (document
